@@ -33,8 +33,8 @@ class Page
     @html = html
   end
   
-  def write_html_to_file(filename)
-    open(filename + ".html", 'w') { |f| f.write(@html) }
+  def write_html_to_file(html, filename)
+    open(filename + ".html", 'w') { |f| f.write(html) }
   end
   
   # Returns the page code as a string with newlines represented as '<newline>'
@@ -67,6 +67,17 @@ class Page
   #  return @tags.include?(t)
   #end
   
+  def merge_template_hash(parent, template)
+    puts "values:#{parent.values.inspect}"
+    puts "template:#{template.values.inspect}"
+    root = ""
+    root = parent.values['root']
+    parent.values.merge!(template.values)
+    parent.values['root'] = root
+    puts "after merge:'#{parent.values.inspect}'"
+    return parent.values
+  end
+  
   # Adds the values found in 'template' to the matching tags in 'values' and
   #  returns the new values hash
   # TODO: unfortunately gonna be much more complicated
@@ -76,29 +87,29 @@ class Page
   #   -probably use regex to match {tag /} and replace with value
   #   -should output string of all merges
   #   -actually a structure of tags made at same time as parsing could assist
-  def merge_template_values(template)
+  def merge_template_values(values)#, template)
     @html = ""
-    merge_values(@values['root'], template.values)
-    #puts "html:'#{@html}'"
+    merge_values(values['root'], values)#, template.values)
+    puts "html:'#{@html}'"
     return @html
   end
   
-  def merge_values(val, temp_vals)
-    #puts "val:'#{val}'"    
+  def merge_values(val, values)#, temp_vals)
+    puts "val:'#{val}'"    
     if val == nil or val == ""
       return
     elsif val.match(TAG)
       #puts "tagmatch:#{$2}"
-      if temp_vals[$2] == nil
-        merge_values(@values[$2], temp_vals)
-      else
-        merge_values(temp_vals[$2], temp_vals)
-      end
-      merge_values(val.sub($1, ''), temp_vals)
+      #if temp_vals[$2] == nil
+        merge_values(values[$2], values)#, temp_vals)
+      #else
+        #merge_values(html, temp_vals[$2], values, temp_vals)
+      #end
+      merge_values(val.sub($1, ''), values)#, temp_vals)
     elsif match = val.match(VALUE_TEXT)
       #puts "valuematch:#{$1}"
       @html += match[1]
-      merge_values(val.sub(match[1], ''), temp_vals)
+      merge_values(val.sub(match[1], ''), values)#, temp_vals)
     else
       return
     end
@@ -160,10 +171,12 @@ class Page
   #  returns an array of tags, a hash containing the tags with values, an array
   #  of open tags
   def parse_line(line, tags, values, open_tags)
-    #puts "name:#{@name} line:'#{line}'"
+    puts "name:#{@name} line:'#{line}'"
     if line.match(TAG)
+      puts "matches:#{$2}"
       tags = handle_adding_tag($2, tags)
       values = handle_add_to_top_open_tag(get_tag($2), open_tags, values)
+      #puts values.inspect
     elsif line.match(OPEN_TAG)
       puts "pushing:#{$2}"
       open_tags.push($2)
@@ -191,6 +204,7 @@ class Page
     if not open_tags.empty?
       return handle_add_line_to_value(line, open_tags.last, values)
     else
+      puts "open_tags empty"
       return values
     end
   end
