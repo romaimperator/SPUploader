@@ -15,11 +15,13 @@ class PageTemplate < Page
     @children.each do |c|
       next unless c.is_a?(PageTemplate)
       merge_template_values(c)
-      puts "'#{@merged_values.inspect}'"
-      merge_values_and_code()
+      write_html_to_file(c.file)
+      #puts "'#{@merged_values.inspect}'"
+      #merge_values_and_code()
     end
   end
   
+  # Adds a template child
   def add_child(template)
     @children.push(template) unless @children.include?(template)
   end

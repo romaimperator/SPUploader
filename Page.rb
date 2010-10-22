@@ -33,6 +33,10 @@ class Page
     @html = html
   end
   
+  def write_html_to_file(filename)
+    open(filename + ".html", 'w') { |f| f.write(@html) }
+  end
+  
   # Returns the page code as a string with newlines represented as '<newline>'
   #def get_code_as_string
   #  return add_newline_tag(@code)
@@ -73,7 +77,31 @@ class Page
   #   -should output string of all merges
   #   -actually a structure of tags made at same time as parsing could assist
   def merge_template_values(template)
-    @merged_values = @values.merge(template.values)
+    @html = ""
+    merge_values(@values['root'], template.values)
+    #puts "html:'#{@html}'"
+    return @html
+  end
+  
+  def merge_values(val, temp_vals)
+    #puts "val:'#{val}'"    
+    if val == nil or val == ""
+      return
+    elsif val.match(TAG)
+      #puts "tagmatch:#{$2}"
+      if temp_vals[$2] == nil
+        merge_values(@values[$2], temp_vals)
+      else
+        merge_values(temp_vals[$2], temp_vals)
+      end
+      merge_values(val.sub($1, ''), temp_vals)
+    elsif match = val.match(VALUE_TEXT)
+      #puts "valuematch:#{$1}"
+      @html += match[1]
+      merge_values(val.sub(match[1], ''), temp_vals)
+    else
+      return
+    end
   end
   
   # Writes values into code returning the string created
@@ -83,17 +111,17 @@ class Page
   
   # Produces regex to match a value opening tag from tag name
   def get_open_tag_regex(tag)
-    return Regexp.new("\\{#{tag}\\}")
+    return Regexp.new("\\A\\{#{tag}\\}")
   end
   
   # Produces regex to match a value closing tag from tag name
   def get_close_tag_regex(tag)
-    return Regexp.new("\\{/#{tag}\\}")
+    return Regexp.new("\\A\\{/#{tag}\\}")
   end
   
   # Produces regex to match a non-value tag from tag name
   def get_tag_regex(tag)
-    return Regexp.new("\\{#{tag} /\\}")
+    return Regexp.new("\\A\\{#{tag} /\\}")
   end
   
   def get_open_tag(tag)

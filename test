@@ -1,11 +1,11 @@
-{title /}
-{middle}
-  some stuff
-  
-{table}
-  other stuff
-{/table}
-{left /}
-{/middle}
-
-{right}right side{random /}{/right}
+<html>
+  {title /}
+  {middle}
+    some stuff
+    {table}
+      other stuff
+    {/table}
+    {left /}
+  {/middle}
+  {right}right side{random /}{/right}
+</html>
