@@ -22,10 +22,6 @@ def fullPath(fname)
   return File.expand_path(fname)
 end
 
-def createLink(file, text)
-  return "<a href=\"" + file + "\" target=\"_blank\">" + text + "</a>"
-end
-
 def buildNavDiv
   latest = get_files_in_directory_list(Dir['Latest/**/'].sort)
   all = get_files_in_directory_list(Dir['All/**/'].sort)
