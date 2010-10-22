@@ -1,0 +1,11 @@
+{title /}
+{middle}
+  some stuff
+  
+{table}
+  other stuff
+{/table}
+
+{/middle}
+
+{right}right side{random /}{/right}

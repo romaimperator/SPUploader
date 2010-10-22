@@ -1,8 +1,18 @@
 
+# Instead identify the tags from the HTML template using regex rather than
+# requiring explicit regex.
+
+# Tag format:
+# {title /}
+#
+# {title}This is text to replace the title tag with{/title}
+
+
+
 require 'Page'
 
 class TemplatedPage < Page
-  attr_accessor :sub_doc
+  attr_accessor :sub_page, :tag_list
   
   # Constructor taking a Page as the template
   def initialize(name, template, filename)
@@ -14,15 +24,17 @@ class TemplatedPage < Page
       exit 1
     end
     super(name, filename, code, [])
-    @sub_doc = []
+    @sub_page = []
+    @tag_list = {}
   end
   
   # Merges the page with the template and any sub pages returning the string of 
   #  HTML code with given replacements for the tags. Skips over tags that are in
   #  the replaceable list and not passed in the hash.
-  def render(tag_list)
+  def render
     temp_code = get_code_as_string()
-    tag_list.each do |tag, val|
+    
+    @tag_list.each do |tag, val|
       if @tags.include?(tag)
         temp_code.gsub!(tag, val)
       end
