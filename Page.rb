@@ -135,9 +135,7 @@ class Page
     #puts "name:#{@name} line:'#{line}'"
     if line.match(TAG)
       tags = handle_adding_tag($2, tags)
-      if not open_tags.empty?
-        values = handle_add_line_to_value(get_tag($2), open_tags.last, values)
-      end
+      values = handle_add_to_top_open_tag(get_tag($2), open_tags, values)
     elsif line.match(OPEN_TAG)
       puts "pushing:#{$2}"
       open_tags.push($2)
@@ -145,9 +143,7 @@ class Page
     elsif line.match(CLOSE_TAG)
       values, open_tags = handle_close_tag($2, values, open_tags)
     elsif line.match(VALUE_TEXT)
-      if not open_tags.empty?
-        values = handle_add_line_to_value($1, open_tags.last, values)
-      end
+      values = handle_add_to_top_open_tag($1, open_tags, values)
     else
       puts "Error: didn't match '#{line}'"
       exit 1
@@ -161,6 +157,16 @@ class Page
     end
   end
   
+  # Checks that there is a currently open tag before adding the current line
+  #  to the value
+  def handle_add_to_top_open_tag(line, open_tags, values)
+    if not open_tags.empty?
+      return handle_add_line_to_value(line, open_tags.last, values)
+    else
+      return values
+    end
+  end
+  
   # Adds the string 'line' to the hash value of 't' in the hash 'values'
   def handle_add_line_to_value(line, t, values)
     if values[t] == nil
@@ -170,15 +176,14 @@ class Page
     end
     return values
   end
+  
   # Checks if the closing tag is expected and if so pops the tag off the stack
   #  and returns the stack
   def handle_close_tag(tag, values, open_tags)
     if open_tags.last == tag
       puts "poping:#{tag}"
       open_tags.pop
-      if not open_tags.empty?
-        values = handle_add_line_to_value(get_tag(tag), open_tags.last, values)
-      end
+      values = handle_add_to_top_open_tag(get_tag(tag), open_tags, values)
       puts values.inspect
     else
       puts "Error: closing tag #{open_tags.first} expected but found #{tag}"
