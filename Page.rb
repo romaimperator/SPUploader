@@ -67,7 +67,8 @@ class Page
       tags, values, open_tags = parse_line(line, tags, values, open_tags)
     end
     if not open_tags.empty?
-      puts "Error: missing #{open_tags.size} closing tags"
+      puts "Error: missing the following #{open_tags.size} closing tags"
+      puts open_tags
       exit 1
     end
     return tags, values
