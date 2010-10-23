@@ -37,7 +37,7 @@ class TemplatedPage < Page
   # Returns a string and set @html to the string of the generated code from the
   #  templates
   def generate_output(values)
-    puts "values:'#{values.inspect}'"
+    #puts "values:'#{values.inspect}'"
     @html = ""
     create_output(values['root'], values)
     #puts "html:'#{@html}'"

@@ -5,8 +5,27 @@ require 'TemplatedPage'
 require 'SSVGenerator'
 
 class TableGenerator < SSVGenerator
-  def iniitialize(value, filename)
-    super(value, filename)
+
+  def initialize(name, filename)
+    puts name
+    super("", filename)
+    @name = name
+  end
+  
+  def val_processor(vals)
+    #puts "vals:#{vals}"
+    date, len, peeps, done = vals
+    if peeps.include?(@name)
+      return "\t<tr>\n\t\t<td>" + date + "</td>\n\t\t<td>" + len + \
+        "</td>\n\t\t<td>" + peeps + "</td>\n\t\t<td>" + done.chop + \
+        "</td>\n\t</tr>\n"
+    else
+      return ""
+    end
+  end
+  
+  def close_text
+    return "</table></div><!--/timetable-->"
   end
   
   def open_text
@@ -14,21 +33,9 @@ class TableGenerator < SSVGenerator
       "<td>Length (min)</td>\n\t\t<td>Members Present</td>\n\t\t<td>Results" + \
       "</td>\n\t</tr>\n"
   end
-  
-  def val_processor(vals)
-    puts "vals:#{vals}"
-    date, len, peeps, done = vals
-    return "\t<tr>\n\t\t<td>" + date + "</td>\n\t\t<td>" + len + \
-      "</td>\n\t\t<td>" + peeps + "</td>\n\t\t<td>" + done.chop + \
-      "</td>\n\t</tr>\n"
-  end
-  
-  def close_text
-    return "</table></div><!--/timetable-->"
-  end
 end
 
-gen = TableGenerator.new("", 'table.csv')
+gen = TableGenerator.new('Marc', 'table.csv')
 
 p = PageTemplate.new('name', nil, 'test')
 c = PageTemplate.new('sub', p, 'test2')
