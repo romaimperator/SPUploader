@@ -13,9 +13,9 @@ class Page
   # matches all text until a {
   VALUE_TEXT = /\A(([^{]|\s)+)(\{|\Z)/
   
-  attr_accessor :name, :code, :file, :tags, :values, :html, :merged_values
+  attr_accessor :name, :code, :file, :tags, :values, :html, :template, :merged
   
-  def initialize(name, filename)
+  def initialize(name, template, filename)
     @name = name
     @file = filename
     begin
@@ -26,21 +26,33 @@ class Page
     end
     @tags, @values = parse_tags
     @html = ""
-    @merged_values = {}
+    @template = template
+    @merged = {}
   end
   
-  def write_html(html)
-    @html = html
+  def merge_with_parent
+    if @template != nil
+      return merge_values(@template.merge_with_parent, @values)
+    else
+      return @values
+    end
   end
   
-  def write_html_to_file(html, filename)
-    open(filename + ".html", 'w') { |f| f.write(html) }
+  def merge_values(template, cur)
+    #puts "template:#{template.inspect}"
+    #puts "cur:#{cur.inspect}"
+    root = ""
+    root = template['root']
+    template.merge!(cur)
+    template['root'] = root
+    #puts "after merge:'#{template.inspect}'"
+    return template
   end
   
-  # Returns the page code as a string with newlines represented as '<newline>'
-  #def get_code_as_string
-  #  return add_newline_tag(@code)
-  #end
+  # Generates the HTML for this template
+  def render
+    return merge_with_parent
+  end
   
   # Returns the string replacing '<newline>' with actual newlines
   def remove_newline_tag(s)
@@ -50,69 +62,6 @@ class Page
   # Returns the string replacing newlines with the NEWLINE_TAG
   def add_newline_tag(s)
     return s.gsub("\n", NEWLINE_TAG)
-  end
-  
-  # Adds the regex tag to the list of replaceable tags in this template
-  #  also adds a list if the passed tag is an array of tags
-  #def add_replaceable_tag(t)
-  #  if t.is_a?(Array)
-  #    t.each { |tag| @tags.push(tag) unless is_replaceable_tag(tag) }
-  #  else
-  #    @tags.push(t) unless is_replaceable_tag(tag)
-  #  end
-  #end
-  
-  # Returns true if the tag is in the tags array
-  #def is_replaceable_tag?(t)
-  #  return @tags.include?(t)
-  #end
-  
-  def merge_template_hash(parent, template)
-    puts "values:#{parent.values.inspect}"
-    puts "template:#{template.values.inspect}"
-    root = ""
-    root = parent.values['root']
-    parent.values.merge!(template.values)
-    parent.values['root'] = root
-    puts "after merge:'#{parent.values.inspect}'"
-    return parent.values
-  end
-  
-  # Adds the values found in 'template' to the matching tags in 'values' and
-  #  returns the new values hash
-  # TODO: unfortunately gonna be much more complicated
-  #   -shouldn't be merged values
-  #   -should produce the code stepping through the root value replacing tags
-  #     that have values in 'template'
-  #   -probably use regex to match {tag /} and replace with value
-  #   -should output string of all merges
-  #   -actually a structure of tags made at same time as parsing could assist
-  def merge_template_values(values)#, template)
-    @html = ""
-    merge_values(values['root'], values)#, template.values)
-    puts "html:'#{@html}'"
-    return @html
-  end
-  
-  def merge_values(val, values)#, temp_vals)
-    puts "val:'#{val}'"    
-    if val == nil or val == ""
-      return
-    elsif val.match(TAG)
-      #puts "tagmatch:#{$2}"
-      #if temp_vals[$2] == nil
-        merge_values(values[$2], values)#, temp_vals)
-      #else
-        #merge_values(html, temp_vals[$2], values, temp_vals)
-      #end
-      merge_values(val.sub($1, ''), values)#, temp_vals)
-    elsif match = val.match(VALUE_TEXT)
-      #puts "valuematch:#{$1}"
-      @html += match[1]
-      merge_values(val.sub(match[1], ''), values)#, temp_vals)
-    else
-      return
-    end
   end
   
   # Writes values into code returning the string created
@@ -171,14 +120,14 @@ class Page
   #  returns an array of tags, a hash containing the tags with values, an array
   #  of open tags
   def parse_line(line, tags, values, open_tags)
-    puts "name:#{@name} line:'#{line}'"
+    #puts "name:#{@name} line:'#{line}'"
     if line.match(TAG)
-      puts "matches:#{$2}"
+      #puts "matches:#{$2}"
       tags = handle_adding_tag($2, tags)
       values = handle_add_to_top_open_tag(get_tag($2), open_tags, values)
       #puts values.inspect
     elsif line.match(OPEN_TAG)
-      puts "pushing:#{$2}"
+      #puts "pushing:#{$2}"
       open_tags.push($2)
       tags = handle_adding_tag($2, tags)
     elsif line.match(CLOSE_TAG)
@@ -223,10 +172,10 @@ class Page
   #  and returns the stack
   def handle_close_tag(tag, values, open_tags)
     if open_tags.last == tag
-      puts "poping:#{tag}"
+      #puts "poping:#{tag}"
       open_tags.pop
       values = handle_add_to_top_open_tag(get_tag(tag), open_tags, values)
-      puts values.inspect
+      #puts values.inspect
     else
       puts "Error: closing tag #{open_tags.first} expected but found #{tag}"
       exit 1

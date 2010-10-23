@@ -12,56 +12,52 @@
 require 'Page'
 
 class TemplatedPage < Page
-  attr_accessor :sub_page, :tag_list
+  attr_accessor :template
   
   # Constructor taking a Page as the template
   def initialize(name, template, filename)
-    code = ""
-    begin
-      open(filename, 'r') { |f| code = f.readlines.join }
-    rescue
-      puts "Could not initialize TemplatedPage. Error opening #{filename}"
+    super(name, template, filename)
+    if template.is_a?(TemplatedPage)
+      puts "Error: TemplatedPages cannot be templates"
       exit 1
     end
-    super(name, filename, code, [])
-    @sub_page = []
-    @tag_list = {}
+    @template = template
   end
   
-  # Merges the page with the template and any sub pages returning the string of 
-  #  HTML code with given replacements for the tags. Skips over tags that are in
-  #  the replaceable list and not passed in the hash.
+  # Renders this template to the file
+  def render_to_file
+    open(@file + ".html", 'w') { |f| f.write(render) }
+  end
+  
+  # Returns the rendered code as a string
   def render
-    temp_code = get_code_as_string()
-    
-    @tag_list.each do |tag, val|
-      if @tags.include?(tag)
-        temp_code.gsub!(tag, val)
-      end
-    end
-    return remove_newline_tag(temp_code)
+    return generate_output(super)
   end
   
-  # Returns the HTML of a link given a file with full path and the text to show 
-  #  on the link
-  def createLink(file, text)
-    return "<a href=\"" + file + "\" target=\"_blank\">" + text + "</a>"
+  # Returns a string and set @html to the string of the generated code from the
+  #  templates
+  def generate_output(values)
+    @html = ""
+    create_output(values['root'], values)
+    #puts "html:'#{@html}'"
+    return @html
   end
   
-  # Returns the first match of regex, r, in a string, s
-  #  note: this replaces newlines with '<newline>'
-  def getMatchFromString(s, r)
-    s = s.gsub("\n", "<newline>")
-    if (s.match(r))
-      return $1
+  # Recursively proceeds through all tags substituting the values for the tags
+  #  and returning the result
+  def create_output(val, values)
+    #puts "val:'#{val}'"    
+    if val == nil or val == ""
+      return
+    elsif val.match(TAG)
+        create_output(values[$2], values)
+      create_output(val.sub($1, ''), values)
+    elsif match = val.match(VALUE_TEXT)
+      @html += match[1]
+      create_output(val.sub(match[1], ''), values)
+    else
+      return
     end
   end
-
-  # Returns the first match of regex, r, in the file, filename
-  def getMatchFromFile(filename, r)
-    lines = []
-    open(filename, 'r') { |f| lines = f.readlines }
-    lines = lines.join
-    return getMatchFromString(lines, r)
-  end
+  
 end
