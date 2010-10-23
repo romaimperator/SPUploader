@@ -35,13 +35,13 @@ class TableGenerator < SSVGenerator
   end
 end
 
-gen = TableGenerator.new('Marc', 'table.csv')
+gen = TableGenerator.new('Dan', 'table.csv')
 
-p = PageTemplate.new('name', nil, 'test')
-c = PageTemplate.new('sub', p, 'test2')
-gc = TemplatedPage.new('grand', c, 'test3')
+p = PageTemplate.new('name', nil, 'template.part')
+c = PageTemplate.new('sub', p, 'user_page.part')
+gc = TemplatedPage.new('grand', c, 'dan.part')
 
-p.add_generator('table', gen)
+gc.add_generator('table', gen)
 
 #puts "'p\n#{p.values.inspect}'"
 #puts "'c\n#{c.values.inspect}'"

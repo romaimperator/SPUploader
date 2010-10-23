@@ -25,6 +25,7 @@ class Page
       exit 1
     end
     @tags, @values = parse_tags
+    #puts "tags:'#{@tags.inspect}'"
     @html = ""
     @template = template
     @merged = {}
@@ -49,8 +50,8 @@ class Page
   
   # Merges the to templates' hashes saving the root of the parent template
   def merge_values(template, cur)
-    #puts "template:#{template.inspect}"
-    #puts "cur:#{cur.inspect}"
+    puts "template:#{template.keys.inspect}"
+    puts "cur:#{cur.keys.inspect}"
     #root = ""
     root = template['root']
     template.merge!(cur)
@@ -135,6 +136,7 @@ class Page
       #puts "matches:#{$2}"
       tags = handle_adding_tag($2, tags)
       values = handle_add_to_top_open_tag(get_tag($2), open_tags, values)
+      values = handle_add_line_to_value("", $2, values)
       #puts values.inspect
     elsif line.match(OPEN_TAG)
       #puts "pushing:#{$2}"
