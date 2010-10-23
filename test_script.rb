@@ -1,5 +1,6 @@
 #!/usr/bin/ruby -w
 
+require 'RootTemplate'
 require 'PageTemplate'
 require 'TemplatedPage'
 require 'SSVGenerator'
@@ -25,19 +26,18 @@ class TableGenerator < SSVGenerator
   end
   
   def close_text
-    return "</table></div><!--/timetable-->"
+    return "</table>"
   end
   
   def open_text
-    return "<div id=\"time_table\"><table>\n\t<tr>\n\t\t<td>Date</td>\n\t\t" + \
-      "<td>Length (min)</td>\n\t\t<td>Members Present</td>\n\t\t<td>Results" + \
-      "</td>\n\t</tr>\n"
+    return "<table>\n\t<tr>\n\t\t<td>Date</td>\n\t\t<td>Length (min)</td>" + \
+      "\n\t\t<td>Members Present</td>\n\t\t<td>Results</td>\n\t</tr>\n"
   end
 end
 
 gen = TableGenerator.new('Dan', 'table.csv')
 
-p = PageTemplate.new('name', nil, 'template.part')
+p = RootTemplate.new('name', 'template.part')
 c = PageTemplate.new('sub', p, 'user_page.part')
 gc = TemplatedPage.new('grand', c, 'dan.part')
 
@@ -51,3 +51,4 @@ gc.add_generator('table', gen)
 #puts "'c\n#{c.tags.inspect}'"
 
 puts gc.render
+gc.render_to_file
