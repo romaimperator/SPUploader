@@ -1,4 +1,4 @@
-
+require 'Generator'
 
 class Page
   NEWLINE_TAG = "<newline>"
@@ -30,6 +30,15 @@ class Page
     @merged = {}
   end
   
+  # Replaces the generator at the specified 'tag' with the 'gen' generator
+  def add_generator(tag, gen)
+    if gen.is_a?(Generator)
+      @values[tag] = gen
+    end
+  end
+  
+  # Recursively proceeds up the template tree until it hits the root and then
+  #  proceeds to merge top-down
   def merge_with_parent
     if @template != nil
       return merge_values(@template.merge_with_parent, @values)
@@ -38,10 +47,11 @@ class Page
     end
   end
   
+  # Merges the to templates' hashes saving the root of the parent template
   def merge_values(template, cur)
     #puts "template:#{template.inspect}"
     #puts "cur:#{cur.inspect}"
-    root = ""
+    #root = ""
     root = template['root']
     template.merge!(cur)
     template['root'] = root
@@ -161,9 +171,9 @@ class Page
   # Adds the string 'line' to the hash value of 't' in the hash 'values'
   def handle_add_line_to_value(line, t, values)
     if values[t] == nil
-      values[t] = line
+      values[t] = Generator.new(line)
     else
-      values[t] += line
+      values[t].append_value(line)
     end
     return values
   end

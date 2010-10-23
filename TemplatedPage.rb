@@ -37,6 +37,7 @@ class TemplatedPage < Page
   # Returns a string and set @html to the string of the generated code from the
   #  templates
   def generate_output(values)
+    puts "values:'#{values.inspect}'"
     @html = ""
     create_output(values['root'], values)
     #puts "html:'#{@html}'"
@@ -46,15 +47,16 @@ class TemplatedPage < Page
   # Recursively proceeds through all tags substituting the values for the tags
   #  and returning the result
   def create_output(val, values)
+    if val.is_a?(String) then val = Generator.new(val) end
     #puts "val:'#{val}'"    
-    if val == nil or val == ""
+    if val.value == nil or val.value == ""
       return
-    elsif val.match(TAG)
-        create_output(values[$2], values)
-      create_output(val.sub($1, ''), values)
-    elsif match = val.match(VALUE_TEXT)
+    elsif val.value.match(TAG)
+      create_output(values[$2], values)
+      create_output(val.value.sub($1, ''), values)
+    elsif match = val.value.match(VALUE_TEXT)
       @html += match[1]
-      create_output(val.sub(match[1], ''), values)
+      create_output(val.value.sub(match[1], ''), values)
     else
       return
     end
