@@ -26,7 +26,7 @@ class TemplatedPage < Page
   
   # Renders this template to the file
   def render_to_file
-    open(@file + ".html", 'w') { |f| f.write(render) }
+    open(@name + ".html", 'w') { |f| f.write(render) }
   end
   
   # Returns the rendered code as a string
