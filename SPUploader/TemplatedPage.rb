@@ -1,5 +1,5 @@
-require 'Page'
-require 'SftpUploader'
+require 'SPUploader/Page'
+require 'SPUploader/SftpUploader'
 
 # This class is the leaf node of a template tree. Each page on the site will
 #  require one of these. The page has the functionality to upload the rendered

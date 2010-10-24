@@ -1,4 +1,4 @@
-require 'Page'
+require 'SPUploader/Page'
 
 # This class represents all templates for the pages. There is a special version,
 #  RootTemplate, is the root of the template tree. This only exists so that

@@ -1,9 +1,6 @@
 #!/usr/bin/ruby -w
 
-require 'RootTemplate'
-require 'PageTemplate'
-require 'TemplatedPage'
-require 'SSVGenerator'
+require 'SPUploader'
 
 # This is provided to be an example of the build script of a simple website.
 
@@ -64,6 +61,8 @@ brett_table = TableGenerator.new('Brett', 'table.ssv')
 #
 #  In this case, only the dan_page and brett_page are renderable.
 
+# NOTE: the '.part' is not required for template files. Any file name will do.
+#  '.part' is just my own usage so I know that it is not a complete file.
 #  This is the root page
 root = RootTemplate.new('root', 'root.part')
 

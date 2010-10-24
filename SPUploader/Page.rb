@@ -1,4 +1,4 @@
-require 'Generator'
+require 'SPUploader/Generator'
 
 # This is the base class for the page types. It handles parsing of the files,
 #  the tags, storing the values for the tags, incorporates the merging,
