@@ -14,7 +14,6 @@ class TableGenerator < SSVGenerator
   end
   
   def val_processor(vals)
-    #puts "vals:#{vals}"
     date, len, peeps, done = vals
     if peeps.include?(@name)
       return "\t<tr>\n\t\t<td>" + date + "</td>\n\t\t<td>" + len + \

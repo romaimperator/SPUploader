@@ -1,5 +1,14 @@
 require 'Generator'
 
+# This is both an example generator class and a useful generator to use. Rather
+#  than using commas, this uses semicolon separated values so that commas can
+#  be used in the values.
+# NOTE: this class doesn't currently exists in a state to use as-is. It should
+#  be subclassed and the following functions overloaded:
+#    vals_processor() - required
+#    open_text()      - optional
+#    close_text()     - optional
+
 class SSVGenerator < Generator
   attr_accessor :filename
   

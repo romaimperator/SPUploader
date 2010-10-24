@@ -62,13 +62,9 @@ class Page
   
   # Merges the to templates' hashes saving the root of the parent template
   def merge_values(template, cur)
-    puts "template:#{template.keys.inspect}"
-    puts "cur:#{cur.keys.inspect}"
-    #root = ""
     root = template['root']
     template.merge!(cur)
     template['root'] = root
-    #puts "after merge:'#{template.inspect}'"
     return template
   end
   
@@ -140,9 +136,7 @@ class Page
     @code.each do |line|
       tags, values, open_tags = parse_line(line, tags, values, open_tags)
     end
-    #puts open_tags.inspect
     open_tags.slice!(0..-1)
-    #puts open_tags.inspect
     if not open_tags.empty?
       puts "Error: missing the following #{open_tags.size} closing tags"
       puts open_tags.inspect
@@ -157,15 +151,11 @@ class Page
   #  returns an array of tags, a hash containing the tags with values, an array
   #  of open tags
   def parse_line(line, tags, values, open_tags)
-    #puts "name:#{@name} line:'#{line}'"
     if line.match(TAG)
-      #puts "matches:#{$2}"
       tags = handle_adding_tag($2, tags)
       values = handle_add_to_top_open_tag(get_tag($2), open_tags, values)
       values = handle_add_line_to_value("", $2, values)
-      #puts values.inspect
     elsif line.match(OPEN_TAG)
-      #puts "pushing:#{$2}"
       open_tags.push($2)
       tags = handle_adding_tag($2, tags)
     elsif line.match(CLOSE_TAG)
@@ -213,10 +203,8 @@ class Page
   #  and returns the stack
   def handle_close_tag(tag, values, open_tags)
     if open_tags.last == tag
-      #puts "poping:#{tag}"
       open_tags.pop
       values = handle_add_to_top_open_tag(get_tag(tag), open_tags, values)
-      #puts values.inspect
     else
       puts "Error: closing tag #{open_tags.first} expected but found #{tag}"
       exit 1
@@ -228,9 +216,7 @@ class Page
   # Adds the line to any value that has an open tag except for when the line is
   #  the open tag for the value
   def handle_add_line_to_values(line, values, open_tags)
-    #line.match(OPEN_TAG)
     open_tags.each do |t|
-      #next if t == $1
       values = handle_add_line_to_value(line, t, values)
     end
     return values
