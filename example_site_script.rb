@@ -18,11 +18,13 @@ PASSWORD = ""
 #  template.
 class TableGenerator < SSVGenerator
   def initialize(name, filename)
-    puts name
     super("", filename)
     @name = name
   end
   
+  
+  # Here the function produces output for each line from the SSV by using the
+  #  values provided in vals.
   def val_processor(vals)
     date, len, peeps, done = vals
     if peeps.include?(@name)
@@ -34,9 +36,11 @@ class TableGenerator < SSVGenerator
     end
   end
   
+  
   def close_text
     return "</table>"
   end
+  
   
   def open_text
     return "<table>\n\t<tr>\n\t\t<td>Date</td>\n\t\t<td>Length (min)</td>" + \

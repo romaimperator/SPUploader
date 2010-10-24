@@ -38,6 +38,12 @@ class Page
     @html = ""
     @template = template
     @merged = {}
+    #puts "##############"
+    #puts "page:#{@name}"
+    #puts "##############"
+    #puts "values before merge '#{@values.inspect}'"
+    @values = merge_with_parent
+    #puts "values after merge '#{@values.inspect}'"
   end
   
   

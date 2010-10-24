@@ -4,4 +4,4 @@
 
 {left}
 <br />
-what goes left{newpart /}{/left}
+what goes left<h3>{newpart /}</h3>{/left}
