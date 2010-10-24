@@ -10,6 +10,7 @@
 
 
 require 'Page'
+require 'SftpUploader'
 
 class TemplatedPage < Page
   attr_accessor :template
@@ -24,15 +25,18 @@ class TemplatedPage < Page
     @template = template
   end
   
+  
   # Renders this template to the file
   def render_to_file
     open(@name + ".html", 'w') { |f| f.write(render) }
   end
   
+  
   # Returns the rendered code as a string
   def render
     return generate_output(super)
   end
+  
   
   # Returns a string and set @html to the string of the generated code from the
   #  templates
@@ -44,6 +48,7 @@ class TemplatedPage < Page
     #puts "html:'#{@html}'"
     return @html
   end
+  
   
   # Recursively proceeds through all tags substituting the values for the tags
   #  and returning the result
@@ -61,6 +66,5 @@ class TemplatedPage < Page
     else
       return
     end
-  end
-  
+  end  
 end

@@ -31,12 +31,14 @@ class Page
     @merged = {}
   end
   
+  
   # Replaces the generator at the specified 'tag' with the 'gen' generator
   def add_generator(tag, gen)
     if gen.is_a?(Generator)
       @values[tag] = gen
     end
   end
+  
   
   # Recursively proceeds up the template tree until it hits the root and then
   #  proceeds to merge top-down
@@ -47,6 +49,7 @@ class Page
       return @values
     end
   end
+  
   
   # Merges the to templates' hashes saving the root of the parent template
   def merge_values(template, cur)
@@ -60,51 +63,64 @@ class Page
     return template
   end
   
+  
   # Generates the HTML for this template
   def render
     return merge_with_parent
   end
+  
   
   # Returns the string replacing '<newline>' with actual newlines
   def remove_newline_tag(s)
     return s.gsub(NEWLINE_TAG, "\n")
   end
   
+  
   # Returns the string replacing newlines with the NEWLINE_TAG
   def add_newline_tag(s)
     return s.gsub("\n", NEWLINE_TAG)
   end
+  
   
   # Writes values into code returning the string created
   def merge_values_and_code
     puts get_tag_regex(values.keys[0])
   end
   
+  
   # Produces regex to match a value opening tag from tag name
   def get_open_tag_regex(tag)
     return Regexp.new("\\A\\{#{tag}\\}")
   end
+  
   
   # Produces regex to match a value closing tag from tag name
   def get_close_tag_regex(tag)
     return Regexp.new("\\A\\{/#{tag}\\}")
   end
   
+  
   # Produces regex to match a non-value tag from tag name
   def get_tag_regex(tag)
     return Regexp.new("\\A\\{#{tag} /\\}")
   end
   
+  
   def get_open_tag(tag)
     return "{#{tag}}"
   end
+  
+  
   def get_close_tag(tag)
     return "{/#{tag}}"
   end
+  
+  
   def get_tag(tag)
     return "{#{tag} /}"
   end
   
+    
   # Proceeds through all of the lines and pulls out the tags that exist and
   #  values accociated (if there are any) and returns the list of tags found and
   #  a hash of {tag => value} for tags that have values
@@ -125,6 +141,7 @@ class Page
     end
     return tags, values
   end
+  
   
   # Checks the 'line' to see if it contains a tag. Then proceeds to handle
   #  depending if it is an opening tag, closing tag, or a placeholder tag.
@@ -159,6 +176,7 @@ class Page
     end
   end
   
+  
   # Checks that there is a currently open tag before adding the current line
   #  to the value
   def handle_add_to_top_open_tag(line, open_tags, values)
@@ -170,6 +188,7 @@ class Page
     end
   end
   
+  
   # Adds the string 'line' to the hash value of 't' in the hash 'values'
   def handle_add_line_to_value(line, t, values)
     if values[t] == nil
@@ -179,6 +198,7 @@ class Page
     end
     return values
   end
+  
   
   # Checks if the closing tag is expected and if so pops the tag off the stack
   #  and returns the stack
@@ -195,6 +215,7 @@ class Page
     return values, open_tags
   end
   
+  
   # Adds the line to any value that has an open tag except for when the line is
   #  the open tag for the value
   def handle_add_line_to_values(line, values, open_tags)
@@ -205,6 +226,7 @@ class Page
     end
     return values
   end
+  
   
   # Adds the given variable to the given array as long as it isn't already in
   #  the array and then returns the array. Used to add a tag.
