@@ -1,28 +1,30 @@
-
-# Instead identify the tags from the HTML template using regex rather than
-# requiring explicit regex.
-
-# Tag format:
-# {title /}
-#
-# {title}This is text to replace the title tag with{/title}
-
-
-
 require 'Page'
 require 'SftpUploader'
 
+# This class is the leaf node of a template tree. Each page on the site will
+#  require one of these. The page has the functionality to upload the rendered
+#  page directly to a remote site. If this is not needed, just pass "" for the
+#  remote_path variable to the constructor and don't called render_to_site.
 class TemplatedPage < Page
-  attr_accessor :template
+  include SftpUploader
+  
+  attr_accessor :template, :remote_path
   
   # Constructor taking a Page as the template
-  def initialize(name, template, filename)
+  def initialize(name, template, filename, remote_path)
     super(name, template, filename)
     if template.is_a?(TemplatedPage)
       puts "Error: TemplatedPages cannot be templates"
       exit 1
     end
     @template = template
+    @remote_path = remote_path
+  end
+  
+  
+  # Renders this template to a file on the remote server
+  def render_to_site
+    write_string_to_remote_file(@name + ".html", render, remote_path)
   end
   
   
@@ -41,11 +43,8 @@ class TemplatedPage < Page
   # Returns a string and set @html to the string of the generated code from the
   #  templates
   def generate_output(values)
-    #puts "values:'#{values.inspect}'"
-    #puts "right:'#{values['right']}'"
     @html = ""
     create_output(values['root'], values)
-    #puts "html:'#{@html}'"
     return @html
   end
   
@@ -53,7 +52,6 @@ class TemplatedPage < Page
   # Recursively proceeds through all tags substituting the values for the tags
   #  and returning the result
   def create_output(val, values)
-    #puts "val:'#{val}'"
     if val.is_a?(String) then val = Generator.new(val) end
     if val.value == nil or val.value == ""
       return

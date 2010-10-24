@@ -1,13 +1,18 @@
+require 'rubygems'
+require 'net/sftp'
+require 'find'
 
+# This module contains functions for uploading the pages to a remote site.
+#
+# It requires the following constants to be declared to work:
+#   HOSTNAME - the hostname of the server
+#   USERNAME - your username to login with
+#   PASSWORD - your password
 
-module SftpUploader
-  #def initialize(hostname, username, password)
-  #  @hostname = hostname
-  #  @username = username
-  #  @password = password
-  #end
-  
-  def writeStringToRemoteFile(filename, string, remote_path)
+module SftpUploader  
+  # This function writes the 'string' to the file of name 'filename' to the
+  #  'remote_path'.
+  def write_string_to_remote_file(filename, string, remote_path)
     Net::SFTP.start(HOSTNAME, USERNAME, :password => PASSWORD) do |sftp|
       file_perm = 0644
       begin
@@ -24,7 +29,10 @@ module SftpUploader
   end
 
 
-  def uploadFile(local_file, remote_path)
+  # This function uploads the 'local_file' to the 'remote_path'. It checks if
+  #  the file has been modified more recently than the one on the server it will
+  #  upload the new version otherwise it does not upload the file.
+  def upload_file(local_file, remote_path)
     Net::SFTP.start(HOSTNAME, USERNAME, :password => PASSWORD) do |sftp|
       file_perm = 0644
       next if File.stat(local_file).directory?
@@ -49,8 +57,11 @@ module SftpUploader
     end
   end
   
-
-  def uploadDirectory(local_dir, remote_path)
+  # This function uploads the 'local_dir' to the 'remote_path'. It recursively
+  #  searches through the folder and checks every file. If the file has been
+  #  modified more recently than the one on the server it will upload the new
+  #  version. If a directory does not exist, it is created.
+  def upload_directory(local_dir, remote_path)
     Net::SFTP.start(HOSTNAME, USERNAME, :password => PASSWORD) do |sftp|
       dir_perm = 0755
       file_perm = 0644

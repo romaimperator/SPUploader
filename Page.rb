@@ -1,9 +1,19 @@
 require 'Generator'
 
+# This is the base class for the page types. It handles parsing of the files,
+#  the tags, storing the values for the tags, incorporates the merging,
+#  functionality, and handles linking of generators to tags.
+#
+# The page's file is read upon instantiation of the class. Generators can be
+#  added afterwards to supply values for the tags. If necessary, the page can
+#  supply the regex used to match a tag by name with the get_tag_regex
+#  functions.
+
 class Page
   NEWLINE_TAG = "<newline>"
   
   # tag syntax: {name /} or {name}value{/name}
+  
   # matches {name /} where $1 is 'name'
   TAG = /\A(\{([^}\/ ]+)\s*\/\})/
   # matches opening tag of {name}value{/name} where $1 is 'name'
@@ -25,7 +35,6 @@ class Page
       exit 1
     end
     @tags, @values = parse_tags
-    #puts "tags:'#{@tags.inspect}'"
     @html = ""
     @template = template
     @merged = {}

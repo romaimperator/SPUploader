@@ -35,20 +35,17 @@ class TableGenerator < SSVGenerator
   end
 end
 
+HOSTNAME = ""
+USERNAME = ""
+PASSWORD = ""
+
 gen = TableGenerator.new('Dan', 'table.csv')
 
 p = RootTemplate.new('name', 'template.part')
 c = PageTemplate.new('sub', p, 'user_page.part')
-gc = TemplatedPage.new('grand', c, 'dan.part')
+gc = TemplatedPage.new('grand', c, 'dan.part', '')
 
 gc.add_generator('table', gen)
 
-#puts "'p\n#{p.values.inspect}'"
-#puts "'c\n#{c.values.inspect}'"
-#puts "'gc\n#{gc.values.inspect}'"
-
-#puts "'p\n#{p.tags.inspect}'"
-#puts "'c\n#{c.tags.inspect}'"
-
 puts gc.render
-gc.render_to_file
+#gc.render_to_site
