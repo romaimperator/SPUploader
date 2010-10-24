@@ -1,0 +1,20 @@
+<html>
+  <title>{title /}</title>
+  
+  <div id="left">
+    {left /}
+  </div>
+  
+  <div id="middle">
+    {middle}
+      some stuff
+      {table}
+        other stuff
+      {/table}
+    {/middle}
+  </div>
+  
+  <div id="right">
+  {right}right side {random /}{/right}
+  </div>
+</html>
