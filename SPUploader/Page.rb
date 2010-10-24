@@ -59,7 +59,7 @@ class Page
   #  proceeds to merge top-down
   def merge_with_parent
     if @template != nil
-      return merge_values(@template.merge_with_parent, @values)
+      return merge_values(@template.values, @values)
     else
       return @values
     end
@@ -69,7 +69,7 @@ class Page
   # Merges the to templates' hashes saving the root of the parent template
   def merge_values(template, cur)
     root = template['root']
-    template.merge!(cur)
+    template = template.merge(cur)
     template['root'] = root
     return template
   end

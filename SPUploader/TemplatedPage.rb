@@ -36,7 +36,7 @@ class TemplatedPage < Page
   
   # Returns the rendered code as a string
   def render
-    return generate_output(super)
+    return generate_output(@values)
   end
   
   
