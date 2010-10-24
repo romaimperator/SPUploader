@@ -7,8 +7,8 @@ website. There is support for uploading to a remote server using sftp as well.
 Installation
 ------------
 
-`$ git clone git://github.com/romaimperator/SPUploader.git`
-`$ cd SPUploader`
+``$ git clone git://github.com/romaimperator/SPUploader.git``
+``$ cd SPUploader``
 
 There you can create your own templates and site build script or check out the
 examples provided.
