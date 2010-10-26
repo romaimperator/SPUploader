@@ -7,10 +7,10 @@
 class Site
   ROOT_NAME = 'root'
   
-  def initialize(name, remote_path='')
+  def initialize(name, site_path='')
     @name = name # Just a simple name for the site
     @pages = {}
-    @remote_path = remote_path # The root remote path.
+    @site_path = site_path # The root remote path.
   end
   
   
@@ -56,7 +56,7 @@ class Site
   # Adds a renderable page to the site with the given name, parent, and
   #  filename. Assumes root if no parent specified. Also checks if the parent
   #  template exists.
-  def add_page(name, filename, parent=ROOT_NAME, file_path='/')
+  def add_page(name, filename, parent=ROOT_NAME, file_path='')
     if template_exists?(parent)
       @pages[name] = TemplatedPage.new(name, @pages[parent], filename,file_path)
     else
@@ -83,7 +83,7 @@ class Site
   #  other by object reference not name. Only in the user space should this
   #  matter. If a newname is not given then use the same name.
   def update_template(name, filename, newname=name, parent=ROOT_NAME, 
-                      file_path='/')
+                      file_path='')
     if is_a_template?(name)
       if name != newname 
         puts "Warning: the name of the template #{name} has changed. Remember"+\
@@ -115,24 +115,24 @@ class Site
   
   
   # Renders all of the pages to files.
-  def render_to_file
+  def render_to_file(site_path=@site_path)
     @pages.each do |p|
-      p.render_to_file
+      p.render_to_file(site_path)
     end
   end
   
   
   # Renders all of the pages to the remote site.
-  def render_to_site(remote_path=@remote_path)
+  def render_to_site(site_path=@site_path)
     @pages.each do |p|
-      p.render_to_site(remote_path)
+      p.render_to_site(site_path)
     end
   end
   
   
-  # Sets the remote path of the site.
-  def set_remote_path(remote_path)
-    @remote_path = remote_path
+  # Sets the path of the root of the site.
+  def set_site_path(site_path)
+    @site_path = site_path
   end
   
   

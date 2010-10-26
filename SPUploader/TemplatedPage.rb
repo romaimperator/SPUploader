@@ -23,14 +23,16 @@ class TemplatedPage < Page
   
   
   # Renders this template to a file on the remote server
-  def render_to_site
-    write_string_to_remote_file(@name + ".html", render, remote_path)
+  def render_to_site(remote_site_path)
+    write_string_to_remote_file(@name + ".html", 
+                                render,
+                                remote_site_path + @remote_path)
   end
   
   
   # Renders this template to the file
-  def render_to_file
-    open(@name + ".html", 'w') { |f| f.write(render) }
+  def render_to_file(remote_site_path)
+    open(remote_site_path + @name + ".html", 'w') { |f| f.write(render) }
   end
   
   
