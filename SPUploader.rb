@@ -1,3 +1,4 @@
+require 'SPUploader/Site'
 require 'SPUploader/Generator'
 require 'SPUploader/Page'
 require 'SPUploader/PageTemplate'
