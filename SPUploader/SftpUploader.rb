@@ -23,6 +23,7 @@ module SftpUploader
         next
       end
       
+      puts "Writing file #{filename} to #{remote_path}"
       sftp.write!(file, 0, string)
       sftp.close!(file)
     end
