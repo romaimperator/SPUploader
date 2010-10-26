@@ -1,6 +1,6 @@
-require 'PageTemplate'
-require 'TemplatedPage'
-require 'RootTemplate'
+require 'SPUploader/PageTemplate'
+require 'SPUploader/TemplatedPage'
+require 'SPUploader/RootTemplate'
 
 # This class is a wrapper for all of the templating stuff. It is designed to 
 #  provide a more simple way to interact with the templating system than using
