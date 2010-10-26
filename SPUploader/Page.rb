@@ -50,7 +50,15 @@ class Page
   # Replaces the generator at the specified 'tag' with the 'gen' generator
   def add_generator(tag, gen)
     if gen.is_a?(Generator)
-      @values[tag] = gen
+      if @values.keys.include?(tag)
+        @values[tag] = gen
+      else
+        puts "Warning: #{tag} is does not exist. Make sure that this tag is " +\
+           + "in one of the files along the chain from the page to the root."
+      end
+    else
+      puts "Warning: was not passed a Generator or an instance of a subclass "+\
+         + "of Generator."
     end
   end
   
