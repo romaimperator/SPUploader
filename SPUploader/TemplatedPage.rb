@@ -32,7 +32,7 @@ class TemplatedPage < Page
   
   # Renders this template to the file
   def render_to_file(remote_site_path)
-    open(remote_site_path + @name + ".html", 'w') { |f| f.write(render) }
+    open(@remote_path + @name + ".html", 'w') { |f| f.write(render) }
   end
   
   
