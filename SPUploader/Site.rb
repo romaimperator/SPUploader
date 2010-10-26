@@ -119,7 +119,9 @@ class Site
   # Renders all of the pages to files.
   def render_to_file(site_path=@site_path)
     @pages.each do |n, p|
-      p.render_to_file(site_path)
+      if is_a_page?(n)
+        p.render_to_file(site_path)
+      end
     end
   end
   
@@ -127,7 +129,9 @@ class Site
   # Renders all of the pages to the remote site.
   def render_to_site(site_path=@site_path)
     @pages.each do |n, p|
-      p.render_to_site(site_path)
+      if is_a_page?(n)
+        p.render_to_site(site_path)
+      end
     end
   end
   
