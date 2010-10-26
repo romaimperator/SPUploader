@@ -20,7 +20,7 @@ class Site
   #  templates name is set to be 'root'.
   def set_root_template(filename)
     if @pages[ROOT_NAME] != nil
-      puts "Warning: the root template is being overwritten. If this is what" +\
+      puts "Warning: the root template is being overwritten. If this is what" \
          + " is desired than you can ignore this message."
     end
     @pages[ROOT_NAME] = RootTemplate.new(ROOT_NAME, filename)
@@ -33,7 +33,7 @@ class Site
     if template_exists?(parent)
       @pages[name] = PageTemplate.new(name, @pages[parent], filename)
     else
-      puts "Warning: could not add page template #{name} because the parent " +\
+      puts "Warning: could not add page template #{name} because the parent " \
          + "template #{parent} is not in the site."
     end
   end
@@ -88,7 +88,7 @@ class Site
                       file_path='')
     if is_a_template?(name)
       if name != newname 
-        puts "Warning: the name of the template #{name} has changed. Remember"+\
+        puts "Warning: the name of the template #{name} has changed. Remember" \
            + " to refer to this new name #{newname} instead."
       end
       @pages[name] = PageTemplate.new(newname, 
@@ -106,7 +106,7 @@ class Site
   def update_page(name, filename, newname=name, parent=ROOT_NAME)
     if is_a_page?(name)
       if name != newname
-        puts "Warning: the name of the template #{name} has changed. Remember"+\
+        puts "Warning: the name of the template #{name} has changed. Remember" \
            + " to refer to this new name #{newname} instead."
       end
       @pages[name] = TemplatedPage.new(newname, @pages[parent], filename)
@@ -117,8 +117,7 @@ class Site
   
   
   # Renders all of the pages to files.
-  def render_to_file(*site_path)
-    if site_path.empty? then site_path = @site_path end
+  def render_to_file(site_path=@site_path)
     @pages.each do |p|
       p.render_to_file(site_path)
     end
@@ -126,8 +125,7 @@ class Site
   
   
   # Renders all of the pages to the remote site.
-  def render_to_site(*site_path)
-    if site_path.empty? then site_path = @site_path end
+  def render_to_site(site_path=@site_path)
     @pages.each do |p|
       p.render_to_site(site_path)
     end
@@ -147,7 +145,7 @@ class Site
         @pages[name].add_generator(t, g)
       end
     else
-      puts "Warning: unable to add generator because the page or template " + \
+      puts "Warning: unable to add generator because the page or template " \
          + "#{name} is not part of the site."
     end
   end
@@ -165,7 +163,7 @@ class Site
     if template_exists?(name)
       return @pages[name].is_a?(PageTemplate)
     else
-      puts "Warning: cannot check if the template #{name} is a page because " +\
+      puts "Warning: cannot check if the template #{name} is a page because " \
          + "it doesn't exist in the site."
       return false
     end
@@ -178,7 +176,7 @@ class Site
     if template_exists?(name)
       return @pages[name].is_a?(TemplatedPage)
     else
-      puts "Warning: cannot check if the page #{name} is a page because it " + \
+      puts "Warning: cannot check if the page #{name} is a page because it " \
          + "doesn't exist in the site."
       return false
     end
