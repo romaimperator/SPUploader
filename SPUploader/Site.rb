@@ -62,7 +62,7 @@ class Site
     if template_exists?(parent)
       @pages[name] = TemplatedPage.new(name, @pages[parent], filename,file_path)
     else
-      puts "Warning: could not add page #{name} because the parent template" + \
+      puts "Warning: could not add page #{name} because the parent template" \
          + " #{parent} is not in the site."
     end
   end
