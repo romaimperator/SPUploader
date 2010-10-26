@@ -137,7 +137,7 @@ class Site
   
   
   # Adds a generator to the specified page or templated page for the given tag.
-  def add_generator(name, tag_gen_list)
+  def add_generator(name, tag_gen_hash)
     if template_exists?(name)
       tag_gen_list.each do |t, g|
         @pages[name].add_generator(t, g)
