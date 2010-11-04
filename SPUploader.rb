@@ -1,5 +1,6 @@
 require 'SPUploader/Site'
 require 'SPUploader/Generator'
+require 'SPUploader/SavedGenerator'
 require 'SPUploader/Page'
 require 'SPUploader/PageTemplate'
 require 'SPUploader/RootTemplate'
