@@ -53,11 +53,11 @@ class Page
       if @values.keys.include?(tag)
         @values[tag] = gen
       else
-        puts "Warning: #{tag} is does not exist. Make sure that this tag is " +\
+        puts "Warning: #{tag} is does not exist. Make sure that this tag is " \
            + "in one of the files along the chain from the page to the root."
       end
     else
-      puts "Warning: was not passed a Generator or an instance of a subclass "+\
+      puts "Warning: was not passed a Generator or an instance of a subclass "\
          + "of Generator."
     end
   end
