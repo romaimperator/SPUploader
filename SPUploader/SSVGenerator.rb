@@ -1,4 +1,4 @@
-require 'SPUploader/Generator'
+require 'SPUploader/SavedGenerator'
 
 # This is both an example generator class and a useful generator to use. Rather
 #  than using commas, this uses semicolon separated values so that commas can
@@ -9,25 +9,15 @@ require 'SPUploader/Generator'
 #    open_text()      - optional
 #    close_text()     - optional
 
-class SSVGenerator < Generator
+class SSVGenerator < SavedGenerator
   attr_accessor :filename
   
   def initialize(value, filename)
     super(value)
     @filename = filename
-    @generated = false
   end
   
-  # Returns the value of this generator. If the value hasn't been created yet
-  #  then it generates it and saves it.
-  def value
-    if not @generated
-      @generated = true
-      @value = generate_value
-    end
-    return @value
-  end
-  
+
   # The function that generates a string from the file given.
   def generate_value
     lines = []
