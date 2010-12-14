@@ -180,6 +180,8 @@ class Page
       values, open_tags = handle_close_tag($2, values, open_tags)
     elsif line.match(VALUE_TEXT)
       values = handle_add_to_top_open_tag($1, open_tags, values)
+    elsif line.match(BRACE_TEXT)
+      values = handle_add_to_top_open_tag($1, open_tags, values)
     else
       puts "Error: didn't match '#{line}'"
       exit 1
