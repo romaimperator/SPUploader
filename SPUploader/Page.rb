@@ -22,6 +22,9 @@ class Page
   CLOSE_TAG = /\A(\{\/([^}\/ ]+)\})/
   # matches all text until a {
   VALUE_TEXT = /\A(([^{]|\s)+)(\{|\Z)/
+  # matches all text from opening { to closing } to allow them in values not
+  # just tags
+  BRACE_TEXT = /\A(\{([^}]|\s)*)/
   
   attr_accessor :name, :code, :file, :tags, :values, :html, :template, :merged
   

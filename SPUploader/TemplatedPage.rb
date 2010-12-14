@@ -63,6 +63,9 @@ class TemplatedPage < Page
     elsif match = val.value.match(VALUE_TEXT)
       @html += match[1]
       create_output(val.value.sub(match[1], ''), values)
+    elsif match = val.value.match(BRACE_TEXT)
+      @html += match[1]
+      create_output(val.value.sub(match[1], ''), values)
     else
       return
     end
