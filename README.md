@@ -7,6 +7,12 @@ website. There is support for uploading to a remote server using sftp as well.
 Installation
 ------------
 
+SPUploader requires the Net SSH and Net SFTP gems. These can be installed using:
+
+    $ gem install net-ssh net-sftp
+
+To get a copy of SPUploader just clone the repository.
+
     $ git clone git://github.com/romaimperator/SPUploader.git
     $ cd SPUploader
 
