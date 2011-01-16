@@ -1,4 +1,4 @@
-require 'SPUploader/Generator'
+require File.dirname(__FILE__) + '/Generator'
 
 # This is a high-level generator class to be used for any generator that only
 # needs to be generated once but used in multiple pages and/or tags.

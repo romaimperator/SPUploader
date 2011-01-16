@@ -1,4 +1,4 @@
-require 'SPUploader/SavedGenerator'
+require File.dirname(__FILE__) + '/SavedGenerator'
 
 # This is both an example generator class and a useful generator to use. Rather
 #  than using commas, this uses semicolon separated values so that commas can

@@ -1,6 +1,6 @@
-require 'SPUploader/PageTemplate'
-require 'SPUploader/TemplatedPage'
-require 'SPUploader/RootTemplate'
+require File.dirname(__FILE__) + '/PageTemplate'
+require File.dirname(__FILE__) + '/TemplatedPage'
+require File.dirname(__FILE__) + '/RootTemplate'
 
 # This class is a wrapper for all of the templating stuff. It is designed to 
 #  provide a more simple way to interact with the templating system than using
